@@ -4,7 +4,7 @@
 pragma solidity ^0.8.0;
 
 /// @title Contract to create a Student Portfolio
-contract project2 {
+contract StudentPortfolio {
     
     struct Student {
         string firstName;
@@ -30,7 +30,7 @@ contract project2 {
         // bool openForWork: looking for opportunities
     /// @return Number of students in the blockchain
     // function addStudent(string memory fName, string memory lName, bool openForWork) public returns (uint) {
-    function addStudent(address studentAddress, string memory fName, string memory lName) public returns (uint) {
+    function addStudent(address studentAddress, string memory fName, string memory lName) public onlyGod returns (uint) {
         Student memory s;
         s.firstName = fName;
         s.lastName = lName;
@@ -38,5 +38,11 @@ contract project2 {
         users[studentAddress] = s;
         numStudents++;
         return numStudents;
+    }
+
+    /// @notice Only god can do
+    modifier onlyGod() {
+        require(msg.sender == god, "Can only be executed by the god");
+        _;
     }
 }
