@@ -38,6 +38,7 @@ contract StudentPortfolio {
     
     uint public numEmployers = 0;
     mapping(address => Employer) public employers; //List of employers (address, string)
+    mapping(string => string) public eName2Company; // from employer name to company
 
     address public god;     // God of the portfolio management
 
@@ -75,6 +76,8 @@ contract StudentPortfolio {
         Employer storage e = employers[employerAddress];
         e.name = name;
         e.companyName = companyName;
+        // name2eAddress[name] = employerAddress;
+        eName2Company[name] = companyName;
         numEmployers++;
         return numEmployers;
     }
@@ -96,7 +99,6 @@ contract StudentPortfolio {
 
     function viewEndorsers(address studentAddress) private validStudent(studentAddress) returns (string [] memory){
         Student storage s = users[studentAddress];
-        Employer storage e = employers[msg.sender];
 
         string memory company;
         string memory empName;
@@ -104,10 +106,8 @@ contract StudentPortfolio {
 
         for(uint i = 0; i < s.numEndorsed; i++){
             empName = s.endorsed[i];
-            company = e.nameToCompany[empName];
-            // endorsements[i] = string(concat(bytes(empName),":",bytes(company)));
-            // endorsements[i] = string.concat(empName,company);
-            endorsements[i] = string(abi.encodePacked(empName, ":", company));
+            company = eName2Company[empName];
+            endorsements[i] = string(abi.encodePacked(empName, " from ", company));
             
         }
         return endorsements;
@@ -175,7 +175,7 @@ contract StudentPortfolio {
     /////////////////// WORK EXP ///////////////////
 
     // students can add their work experiences: requires endorsements
-    function addExperienceStudent(string memory work) public validStudent(msg.sender) returns (uint) {
+    function studentAddExperience(string memory work) public validStudent(msg.sender) returns (uint) {
         Student storage s = users[msg.sender];
         s.numToExp[s.numExperiences] = work;
         s.numExperiences++;
@@ -183,9 +183,10 @@ contract StudentPortfolio {
     }
 
     // employers can add experiences for the students (already endorsed)
-    function addExperienceEmployer(address studentAddress, string memory work) public validStudent(studentAddress) validEmployer(msg.sender) returns (uint) {
+    function employerAddExperience(address studentAddress, string memory work) public validStudent(studentAddress) validEmployer(msg.sender) returns (uint) {
         Student storage s = users[studentAddress];
         s.numToExp[s.numExperiences] = work;
+        endorse(studentAddress);
         s.numExperiences++;
         return s.numExperiences;
     }
