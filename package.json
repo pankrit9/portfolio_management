@@ -1,0 +1,36 @@
+{
+    "name": "oracle_example",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "do": "npx tsc && node build/index.js deploy oracle",
+      "lo": "npx tsc && node build/index.js listen oracle",
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+      "@nomiclabs/buidler": "^1.4.8",
+      "@types/node": "^15.14.9",
+      "typescript": "^4.7.4"
+    },
+    "dependencies": {
+      "axios": "^0.21.4",
+      "dotenv": "^16.0.1",
+      "mongodb": "^4.8.0",
+      "solc": "^0.8.15",
+      "web3": "^1.7.4",
+      "web3-core": "^1.7.4",
+      "web3-eth-contract": "^1.7.4"
+    },
+    "directories": {
+      "test": "tests"
+    },
+    "repository": {
+      "type": "git",
+      "url": "gitlab@gitlab.cse.unsw.EDU.AU:z5316569/blockchain-project.git"
+    }
+  }
+  
